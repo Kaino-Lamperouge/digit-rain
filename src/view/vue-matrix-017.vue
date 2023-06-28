@@ -7,11 +7,11 @@ export default {
   props: {
     canvasWidth: {
       type: Number,
-      default: 800
+      default: 1440
     },
     canvasHeight: {
       type: Number,
-      default: 600
+      default: 740
     },
     fontSize: {
       type: Number,
