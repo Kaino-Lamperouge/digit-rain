@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+    <style></style>
+  </head>
+  <body>
+    <canvas id="canvas" style="background-color: #000"></canvas>
+  </body>
+  <script>
+    const canvasWidth = window.innerWidth;
+    const canvasHeight = window.innerHeight;
+    const canvas = document.getElementById("canvas");
+    const canvasCtx = canvas.getContext("2d");
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+    if (canvasCtx) {
+      const fontSize = 20;
+      const fontFamily = "arial";
+      const textContent = "王袁一琦十选登顶年少为";
+      const textColor = "#0F0";
+      const backgroundColor = "rgba(0,0,0,0.1)";
+      const speed = 10;
+      const columns = canvasWidth / fontSize;
+      const rainDropPositionArray = [];
+      var speedCnt = 0;
+      this.timer = setInterval(() => {
+        window.requestAnimationFrame = (function () {
+          return (
+            window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            function (callback) {
+              window.setTimeout(callback, 1000 / 60);
+            }
+          );
+        })();
+        window.cancelAnimationFrame = (function () {
+          return (
+            window.cancelAnimationFrame ||
+            window.webkitCancelAnimationFrame ||
+            window.mozCancelAnimationFrame ||
+            window.oCancelAnimationFrame ||
+            function (id) {
+              window.clearTimeout(id);
+            }
+          );
+        })();
+
+        if (canvas.tagName.toLowerCase() !== "canvas") {
+          console.error("Error! Invalid canvas! Please check the canvas's id!");
+        }
+        canvasCtx.font = fontSize + "px " + fontFamily;
+        for (var i = 0; i < columns; i++) {
+          rainDropPositionArray.push(0);
+        }
+        function animationUpdate() {
+          speedCnt++;
+          if (speedCnt === speed) {
+            speedCnt = 0;
+            canvasCtx.fillStyle = backgroundColor;
+            canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+            canvasCtx.fillStyle = textColor;
+            for (var i = 0, len = rainDropPositionArray.length; i < len; i++) {
+              rainDropPositionArray[i]++;
+              var textYPostion = rainDropPositionArray[i] * fontSize;
+              var randomText = textContent[(textYPostion / fontSize) % 11];
+              canvasCtx.fillText(randomText, i * fontSize, textYPostion);
+              if (textYPostion > canvasHeight) {
+                if (Math.random() > 0.9) {
+                  rainDropPositionArray[i] = 0;
+                }
+              }
+            }
+          }
+        }
+        window.requestAnimationFrame(animationUpdate);
+      }, speed);
+    }
+  </script>
+</html>
